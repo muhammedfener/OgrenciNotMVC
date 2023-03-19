@@ -31,7 +31,7 @@ namespace OgrenciNotMVC.Controllers
 
             ViewBag.Dersler = items;*/
 
-            List<SelectListItem> degerler = (from i in db.TBLKULUPLER.ToList() select new SelectListItem() { Text = i.KULUPAD, Value = i.KULUPID.ToString()}).ToList();
+            List<SelectListItem> degerler = (from i in db.TBLKULUPLER.ToList() select new SelectListItem() { Text = i.KULUPAD, Value = i.KULUPID.ToString() }).ToList();
 
             ViewBag.dgr = degerler;
 
@@ -59,7 +59,22 @@ namespace OgrenciNotMVC.Controllers
         public ActionResult OgrenciGetir(int id)
         {
             var ogrenci = db.TBLOGRENCILER.Find(id);
+            List<SelectListItem> degerler = (from i in db.TBLKULUPLER.ToList() select new SelectListItem() { Text = i.KULUPAD, Value = i.KULUPID.ToString() }).ToList();
+
+            ViewBag.dgr = degerler;
             return View(ogrenci);
+        }
+
+        public ActionResult Guncelle(TBLOGRENCILER ogrenci)
+        {
+            var ogr = db.TBLOGRENCILER.Find(ogrenci.OGRID);
+            ogr.OGRAD = ogrenci.OGRAD;
+            ogr.OGRSOYAD = ogrenci.OGRSOYAD;
+            ogr.OGRFOTO = ogrenci.OGRFOTO;
+            ogr.OGRCINSIYET = ogrenci.OGRCINSIYET;
+            ogr.OGRKULUP = ogrenci.OGRKULUP;
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
